@@ -45,15 +45,13 @@ run:
 	})
 
 	It("generates a shell script", func() {
-		command := exec.Command(binaryPath, "-taskYamlPath", taskYaml.Name())
+		command := exec.Command(binaryPath, "-taskYamlPath", taskYaml.Name(), "-target", "test-target")
 		session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 		Expect(err).ToNot(HaveOccurred())
 		Eventually(session).Should(gexec.Exit(0))
 		Expect(session.Out.Contents()).To(BeEquivalentTo(`#!/bin/bash
 
 set -eu
-
-TARGET=
 
 INPUT1=$(mktemp -d -t input1)
 INPUT2=$(mktemp -d -t input2)
@@ -62,7 +60,7 @@ OUTPUT1=$(mktemp -d -t output1)
 OUTPUT2=$(mktemp -d -t output2)
 
 fly \
-  -t $TARGET \
+  -t test-target \
   execute \
   -i input1=$INPUT1 \
   -i input2=$INPUT2 \
