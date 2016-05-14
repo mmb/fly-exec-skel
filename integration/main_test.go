@@ -23,14 +23,12 @@ var _ = Describe("Integration", func() {
 
 		_, err = taskYaml.Write([]byte(`---
 platform: linux
-
 inputs:
   - name: input-1
   - name: input-2
 outputs:
   - name: output-1
   - name: output-2
-
 run:
   path: task.sh
 `))
