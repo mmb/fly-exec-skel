@@ -31,6 +31,11 @@ outputs:
   - name: output-2
 run:
   path: task.sh
+params:
+  PARAM_1: param-1-default
+  PARAM_2: param-2-default
+  PARAM_3:
+  PARAM_4:
 `))
 		Expect(err).ToNot(HaveOccurred())
 		taskYaml.Close()
@@ -50,6 +55,16 @@ run:
 		Expect(session.Out.Contents()).To(BeEquivalentTo(`#!/bin/bash
 
 set -eu
+
+# export PARAM_1=param-1-default
+
+# export PARAM_2=param-2-default
+
+# export PARAM_3=<set PARAM_3 value>
+echo $PARAM_3
+
+# export PARAM_4=<set PARAM_4 value>
+echo $PARAM_4
 
 INPUT_1=$(mktemp -d -t input-1)
 # Create test input in $INPUT_1

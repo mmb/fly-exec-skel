@@ -34,7 +34,11 @@ func main() {
 	templateText := `#!/bin/bash
 
 set -eu
-{{ with .TaskConfig }}{{ range .Inputs }}
+{{ with .TaskConfig }}{{ range $k, $v := .Params }}
+{{ if $v }}# export {{ $k }}={{ $v }}
+{{ else }}# export {{ $k }}=<set {{ $k }} value>
+echo ${{ $k }}
+{{ end }}{{ end }}{{ end }}{{ with .TaskConfig }}{{ range .Inputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 # Create test input in ${{ envVarName .Name }}
 {{ end }}{{ range .Outputs }}
