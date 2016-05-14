@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"github.com/concourse/atc"
+	"github.com/mmb/fly-exec-skel/flyexecskel"
 	"io/ioutil"
 	"os"
-	"strings"
 	"text/template"
 )
 
@@ -35,26 +35,26 @@ func main() {
 
 set -eu
 {{ with .TaskConfig }}{{ range .Inputs }}
-{{ upcase .Name }}=$(mktemp -d -t {{ .Name }})
-# Create test input in ${{ upcase .Name }}
+{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
+# Create test input in ${{ envVarName .Name }}
 {{ end }}{{ range .Outputs }}
-{{ upcase .Name }}=$(mktemp -d -t {{ .Name }})
+{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 {{ end }}{{ end }}
 fly \
   -t {{ .Target }} \
   execute \
-{{ with .TaskConfig }}{{ range .Inputs }}  -i {{ .Name }}=${{ upcase .Name }} \
-{{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ upcase .Name }} \
+{{ with .TaskConfig }}{{ range .Inputs }}  -i {{ .Name }}=${{ envVarName .Name }} \
+{{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}  -c task.yml
 {{ range .Outputs }}
-ls -l ${{ upcase .Name }}
+ls -l ${{ envVarName .Name }}
 {{ end }}{{ range .Inputs }}
-rm -rf ${{ upcase .Name }}
+rm -rf ${{ envVarName .Name }}
 {{ end }}{{ range .Outputs }}
-rm -rf ${{ upcase .Name }}
+rm -rf ${{ envVarName .Name }}
 {{ end }}{{ end }}`
 	tmpl := template.New("script")
-	tmpl.Funcs(template.FuncMap{"upcase": strings.ToUpper})
+	tmpl.Funcs(template.FuncMap{"envVarName": flyexecskel.EnvVarName})
 	tmpl.Parse(templateText)
 
 	err = tmpl.Execute(os.Stdout, ti)

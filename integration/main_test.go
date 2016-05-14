@@ -25,11 +25,11 @@ var _ = Describe("Integration", func() {
 platform: linux
 
 inputs:
-  - name: input1
-  - name: input2
+  - name: input-1
+  - name: input-2
 outputs:
-  - name: output1
-  - name: output2
+  - name: output-1
+  - name: output-2
 
 run:
   path: task.sh
@@ -53,36 +53,36 @@ run:
 
 set -eu
 
-INPUT1=$(mktemp -d -t input1)
-# Create test input in $INPUT1
+INPUT_1=$(mktemp -d -t input-1)
+# Create test input in $INPUT_1
 
-INPUT2=$(mktemp -d -t input2)
-# Create test input in $INPUT2
+INPUT_2=$(mktemp -d -t input-2)
+# Create test input in $INPUT_2
 
-OUTPUT1=$(mktemp -d -t output1)
+OUTPUT_1=$(mktemp -d -t output-1)
 
-OUTPUT2=$(mktemp -d -t output2)
+OUTPUT_2=$(mktemp -d -t output-2)
 
 fly \
   -t test-target \
   execute \
-  -i input1=$INPUT1 \
-  -i input2=$INPUT2 \
-  -o output1=$OUTPUT1 \
-  -o output2=$OUTPUT2 \
+  -i input-1=$INPUT_1 \
+  -i input-2=$INPUT_2 \
+  -o output-1=$OUTPUT_1 \
+  -o output-2=$OUTPUT_2 \
   -c task.yml
 
-ls -l $OUTPUT1
+ls -l $OUTPUT_1
 
-ls -l $OUTPUT2
+ls -l $OUTPUT_2
 
-rm -rf $INPUT1
+rm -rf $INPUT_1
 
-rm -rf $INPUT2
+rm -rf $INPUT_2
 
-rm -rf $OUTPUT1
+rm -rf $OUTPUT_1
 
-rm -rf $OUTPUT2
+rm -rf $OUTPUT_2
 `))
 	})
 
