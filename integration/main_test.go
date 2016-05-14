@@ -54,7 +54,9 @@ run:
 set -eu
 
 INPUT1=$(mktemp -d -t input1)
+# Create test input in $INPUT1
 INPUT2=$(mktemp -d -t input2)
+# Create test input in $INPUT2
 
 OUTPUT1=$(mktemp -d -t output1)
 OUTPUT2=$(mktemp -d -t output2)

@@ -35,7 +35,8 @@ func main() {
 
 set -eu
 {{ with .TaskConfig }}{{ range .Inputs }}
-{{ upcase .Name }}=$(mktemp -d -t {{ .Name }}){{ end }}
+{{ upcase .Name }}=$(mktemp -d -t {{ .Name }})
+# Create test input in ${{ upcase .Name }}{{ end }}
 {{ range .Outputs }}
 {{ upcase .Name }}=$(mktemp -d -t {{ .Name }}){{ end }}{{ end }}
 
