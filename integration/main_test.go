@@ -55,10 +55,12 @@ set -eu
 
 INPUT1=$(mktemp -d -t input1)
 # Create test input in $INPUT1
+
 INPUT2=$(mktemp -d -t input2)
 # Create test input in $INPUT2
 
 OUTPUT1=$(mktemp -d -t output1)
+
 OUTPUT2=$(mktemp -d -t output2)
 
 fly \
@@ -71,12 +73,15 @@ fly \
   -c task.yml
 
 ls -l $OUTPUT1
+
 ls -l $OUTPUT2
 
 rm -rf $INPUT1
+
 rm -rf $INPUT2
 
 rm -rf $OUTPUT1
+
 rm -rf $OUTPUT2
 `))
 	})

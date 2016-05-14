@@ -36,10 +36,10 @@ func main() {
 set -eu
 {{ with .TaskConfig }}{{ range .Inputs }}
 {{ upcase .Name }}=$(mktemp -d -t {{ .Name }})
-# Create test input in ${{ upcase .Name }}{{ end }}
-{{ range .Outputs }}
-{{ upcase .Name }}=$(mktemp -d -t {{ .Name }}){{ end }}{{ end }}
-
+# Create test input in ${{ upcase .Name }}
+{{ end }}{{ range .Outputs }}
+{{ upcase .Name }}=$(mktemp -d -t {{ .Name }})
+{{ end }}{{ end }}
 fly \
   -t {{ .Target }} \
   execute \
@@ -47,12 +47,12 @@ fly \
 {{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ upcase .Name }} \
 {{ end }}  -c task.yml
 {{ range .Outputs }}
-ls -l ${{ upcase .Name }}{{ end }}
-{{ range .Inputs }}
-rm -rf ${{ upcase .Name }}{{ end }}
-{{ range .Outputs }}
-rm -rf ${{ upcase .Name }}{{ end }}{{ end }}
-`
+ls -l ${{ upcase .Name }}
+{{ end }}{{ range .Inputs }}
+rm -rf ${{ upcase .Name }}
+{{ end }}{{ range .Outputs }}
+rm -rf ${{ upcase .Name }}
+{{ end }}{{ end }}`
 	tmpl := template.New("script")
 	tmpl.Funcs(template.FuncMap{"upcase": strings.ToUpper})
 	tmpl.Parse(templateText)
