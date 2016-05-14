@@ -60,10 +60,12 @@ set -eu
 
 # export PARAM_2=param-2-default
 
-# export PARAM_3=<set PARAM_3 value>
+# uncomment and set PARAM_3 value
+# export PARAM_3=
 echo $PARAM_3
 
-# export PARAM_4=<set PARAM_4 value>
+# uncomment and set PARAM_4 value
+# export PARAM_4=
 echo $PARAM_4
 
 INPUT_1=$(mktemp -d -t input-1)

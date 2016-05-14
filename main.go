@@ -36,7 +36,8 @@ func main() {
 set -eu
 {{ with .TaskConfig }}{{ range $k, $v := .Params }}
 {{ if $v }}# export {{ $k }}={{ $v }}
-{{ else }}# export {{ $k }}=<set {{ $k }} value>
+{{ else }}# uncomment and set {{ $k }} value
+# export {{ $k }}=
 echo ${{ $k }}
 {{ end }}{{ end }}{{ end }}{{ with .TaskConfig }}{{ range .Inputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
