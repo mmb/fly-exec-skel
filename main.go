@@ -34,26 +34,38 @@ func main() {
 	templateText := `#!/bin/bash
 
 set -eu
+
+# params -----------------------------------------------------------------------
 {{ with .TaskConfig }}{{ range $k, $v := .Params }}
 {{ if $v }}# export {{ $k }}={{ $v }}
 {{ else }}# uncomment and set {{ $k }} value
 # export {{ $k }}=
 echo ${{ $k }}
-{{ end }}{{ end }}{{ end }}{{ with .TaskConfig }}{{ range .Inputs }}
+{{ end }}{{ end }}{{ end }}{{ with .TaskConfig }}
+# inputs -----------------------------------------------------------------------
+{{ range .Inputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 # Create test input in ${{ envVarName .Name }}
-{{ end }}{{ range .Outputs }}
+{{ end }}
+# outputs ----------------------------------------------------------------------
+{{ range .Outputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 {{ end }}{{ end }}
+# execute ----------------------------------------------------------------------
+
 fly \
   -t {{ .Target }} \
   execute \
 {{ with .TaskConfig }}{{ range .Inputs }}  -i {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}  -c task.yml
+
+# show outputs -----------------------------------------------------------------
 {{ range .Outputs }}
 ls -l ${{ envVarName .Name }}
-{{ end }}{{ range .Inputs }}
+{{ end }}
+# cleanup ----------------------------------------------------------------------
+{{ range .Inputs }}
 rm -rf ${{ envVarName .Name }}
 {{ end }}{{ range .Outputs }}
 rm -rf ${{ envVarName .Name }}

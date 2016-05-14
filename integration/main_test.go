@@ -56,6 +56,8 @@ params:
 
 set -eu
 
+# params -----------------------------------------------------------------------
+
 # export PARAM_1=param-1-default
 
 # export PARAM_2=param-2-default
@@ -68,15 +70,21 @@ echo $PARAM_3
 # export PARAM_4=
 echo $PARAM_4
 
+# inputs -----------------------------------------------------------------------
+
 INPUT_1=$(mktemp -d -t input-1)
 # Create test input in $INPUT_1
 
 INPUT_2=$(mktemp -d -t input-2)
 # Create test input in $INPUT_2
 
+# outputs ----------------------------------------------------------------------
+
 OUTPUT_1=$(mktemp -d -t output-1)
 
 OUTPUT_2=$(mktemp -d -t output-2)
+
+# execute ----------------------------------------------------------------------
 
 fly \
   -t test-target \
@@ -87,9 +95,13 @@ fly \
   -o output-2=$OUTPUT_2 \
   -c task.yml
 
+# show outputs -----------------------------------------------------------------
+
 ls -l $OUTPUT_1
 
 ls -l $OUTPUT_2
+
+# cleanup ----------------------------------------------------------------------
 
 rm -rf $INPUT_1
 
