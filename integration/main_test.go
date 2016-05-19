@@ -60,19 +60,19 @@ set -eu
 
 # export PARAM_1=param-1-default
 # export PARAM_2=param-2-default
-# uncomment and set PARAM_3 value
+# TODO set PARAM_3
 # export PARAM_3=
 echo $PARAM_3
-# uncomment and set PARAM_4 value
+# TODO set PARAM_4
 # export PARAM_4=
 echo $PARAM_4
 
 # inputs -----------------------------------------------------------------------
 
 INPUT_1=$(mktemp -d -t input-1)
-# Create test input in $INPUT_1
+# TODO create test input in $INPUT_1
 INPUT_2=$(mktemp -d -t input-2)
-# Create test input in $INPUT_2
+# TODO create test input in $INPUT_2
 
 # outputs ----------------------------------------------------------------------
 

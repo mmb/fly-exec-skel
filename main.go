@@ -37,14 +37,14 @@ set -eu
 
 {{ divider "params" }}
 {{ with .TaskConfig }}{{ range $k, $v := .Params }}
-{{ if $v }}# export {{ $k }}={{ $v }}{{ else }}# uncomment and set {{ $k }} value
+{{ if $v }}# export {{ $k }}={{ $v }}{{ else }}# TODO set {{ $k }}
 # export {{ $k }}=
 echo ${{ $k }}{{ end }}{{ end }}{{ end }}
 
 {{ divider "inputs" }}
 {{ with .TaskConfig }}{{ range .Inputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
-# Create test input in ${{ envVarName .Name }}{{ end }}
+# TODO create test input in ${{ envVarName .Name }}{{ end }}
 
 {{ divider "outputs" }}
 {{ range .Outputs }}
