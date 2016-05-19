@@ -35,23 +35,23 @@ func main() {
 
 set -eu
 
-# params -----------------------------------------------------------------------
+{{ divider "params" }}
 {{ with .TaskConfig }}{{ range $k, $v := .Params }}
 {{ if $v }}# export {{ $k }}={{ $v }}
 {{ else }}# uncomment and set {{ $k }} value
 # export {{ $k }}=
 echo ${{ $k }}
 {{ end }}{{ end }}{{ end }}{{ with .TaskConfig }}
-# inputs -----------------------------------------------------------------------
+{{ divider "inputs" }}
 {{ range .Inputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 # Create test input in ${{ envVarName .Name }}
 {{ end }}
-# outputs ----------------------------------------------------------------------
+{{ divider "outputs" }}
 {{ range .Outputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 {{ end }}{{ end }}
-# execute ----------------------------------------------------------------------
+{{ divider "execute" }}
 
 fly \
   -t {{ .Target }} \
@@ -60,18 +60,21 @@ fly \
 {{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}  -c task.yml
 
-# show outputs -----------------------------------------------------------------
+{{ divider "show outputs" }}
 {{ range .Outputs }}
 ls -l ${{ envVarName .Name }}
 {{ end }}
-# cleanup ----------------------------------------------------------------------
+{{ divider "cleanup" }}
 {{ range .Inputs }}
 rm -rf ${{ envVarName .Name }}
 {{ end }}{{ range .Outputs }}
 rm -rf ${{ envVarName .Name }}
 {{ end }}{{ end }}`
 	tmpl := template.New("script")
-	tmpl.Funcs(template.FuncMap{"envVarName": flyexecskel.EnvVarName})
+	tmpl.Funcs(template.FuncMap{
+		"divider":    flyexecskel.Divider,
+		"envVarName": flyexecskel.EnvVarName,
+	})
 	tmpl.Parse(templateText)
 
 	err = tmpl.Execute(os.Stdout, ti)
