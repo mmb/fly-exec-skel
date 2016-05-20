@@ -10,8 +10,8 @@ import (
 )
 
 type templateInput struct {
-	TaskConfig atc.TaskConfig
-	Target     string
+	TaskConfig    atc.TaskConfig
+	Target        string
 }
 
 func main() {
@@ -42,7 +42,7 @@ set -eu
 echo ${{ $k }}{{ end }}{{ end }}{{ end }}
 
 {{ divider "inputs" }}
-{{ with .TaskConfig }}{{ range .Inputs }}
+{{ with .TaskConfig }}{{ range nonTaskInputs . }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 # TODO create test input in ${{ envVarName .Name }}{{ end }}
 
@@ -55,7 +55,8 @@ echo ${{ $k }}{{ end }}{{ end }}{{ end }}
 fly \
   -t {{ .Target }} \
   execute \
-{{ with .TaskConfig }}{{ range .Inputs }}  -i {{ .Name }}=${{ envVarName .Name }} \
+  -i {{ taskInputName .TaskConfig }}={{ runPathToTaskInput .TaskConfig }} \
+{{ with .TaskConfig }}{{ range nonTaskInputs . }}  -i {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}  -c task.yml
 
@@ -64,14 +65,17 @@ fly \
 ls -l ${{ envVarName .Name }}{{ end }}
 
 {{ divider "cleanup" }}
-{{ range .Inputs }}
+{{ range nonTaskInputs . }}
 rm -rf ${{ envVarName .Name }}{{ end }}{{ range .Outputs }}
 rm -rf ${{ envVarName .Name }}{{ end }}
 {{ end }}`
 	tmpl := template.New("script")
 	tmpl.Funcs(template.FuncMap{
-		"divider":    flyexecskel.Divider,
-		"envVarName": flyexecskel.EnvVarName,
+		"divider":            flyexecskel.Divider,
+		"envVarName":         flyexecskel.EnvVarName,
+		"nonTaskInputs":      flyexecskel.NonTaskInputs,
+		"runPathToTaskInput": flyexecskel.RunPathToTaskInput,
+		"taskInputName":      flyexecskel.TaskInputName,
 	})
 	tmpl.Parse(templateText)
 

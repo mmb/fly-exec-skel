@@ -26,11 +26,12 @@ platform: linux
 inputs:
   - name: input-1
   - name: input-2
+  - name: task-repo
 outputs:
   - name: output-1
   - name: output-2
 run:
-  path: task.sh
+  path: task-repo/task1/task.sh
 params:
   PARAM_1: param-1-default
   PARAM_2: param-2-default
@@ -84,6 +85,7 @@ OUTPUT_2=$(mktemp -d -t output-2)
 fly \
   -t test-target \
   execute \
+  -i task-repo=.. \
   -i input-1=$INPUT_1 \
   -i input-2=$INPUT_2 \
   -o output-1=$OUTPUT_1 \
