@@ -56,6 +56,7 @@ OUTPUT_2=$(mktemp -d -t output-2)
 fly \
   -t test-target \
   execute \
+  -i task-repo=.. \
   -i input-1=$INPUT_1 \
   -i input-2=$INPUT_2 \
   -o output-1=$OUTPUT_1 \
