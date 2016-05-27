@@ -12,16 +12,7 @@ import (
 var _ = Describe("Integration", func() {
 	var binaryPath string
 	var taskYamlFile *os.File
-
-	BeforeSuite(func() {
-		var err error
-		binaryPath, err = gexec.Build("github.com/mmb/fly-exec-skel")
-		Expect(err).ToNot(HaveOccurred())
-
-		taskYamlFile, err = ioutil.TempFile("", "task.yml")
-		Expect(err).ToNot(HaveOccurred())
-
-		_, err = taskYamlFile.Write([]byte(`---
+	taskYaml := `---
 platform: linux
 inputs:
   - name: input-1
@@ -37,7 +28,17 @@ params:
   PARAM_2: param-2-default
   PARAM_3:
   PARAM_4:
-`))
+`
+
+	BeforeSuite(func() {
+		var err error
+		binaryPath, err = gexec.Build("github.com/mmb/fly-exec-skel")
+		Expect(err).ToNot(HaveOccurred())
+
+		taskYamlFile, err = ioutil.TempFile("", "task.yml")
+		Expect(err).ToNot(HaveOccurred())
+
+		_, err = taskYamlFile.Write([]byte(taskYaml))
 		Expect(err).ToNot(HaveOccurred())
 		taskYamlFile.Close()
 	})
