@@ -10,8 +10,8 @@ import (
 )
 
 type templateInput struct {
-	TaskConfig    atc.TaskConfig
-	Target        string
+	TaskConfig atc.TaskConfig
+	Target     string
 }
 
 func main() {
