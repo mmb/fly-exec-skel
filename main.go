@@ -34,12 +34,11 @@ func main() {
 	templateText := `#!/bin/bash
 
 set -eu
-
 {{ with .TaskConfig -}}
 
 {{ if .Params -}}
 
-{{ divider "params" }}
+{{ "\n" }}{{ divider "params" }}
 
 {{ range $k, $v := .Params -}}
 {{ if $v -}}
