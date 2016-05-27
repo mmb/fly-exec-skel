@@ -80,10 +80,10 @@ fly \
 {{ range nonTaskInputs . }}  -i {{ .Name }}=${{ envVarName .Name }} \
 {{ end -}}
 {{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
-{{ end }}  -c task.yml
+{{ end }}  -c task.yml{{ "\n" }}
 
-{{ if .Outputs -}}
-{{ divider "show outputs" }}
+{{- if .Outputs -}}
+{{ "\n" }}{{ divider "show outputs" }}
 
 {{ range .Outputs -}}
 ls -l ${{ envVarName .Name }}
