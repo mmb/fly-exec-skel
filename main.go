@@ -35,18 +35,22 @@ func main() {
 
 set -eu
 
-{{ divider "params" }}
 {{ with .TaskConfig -}}
-{{ range $k, $v := .Params }}
+
+{{ if .Params -}}
+
+{{ divider "params" }}
+
+{{ range $k, $v := .Params -}}
 {{ if $v -}}
-# export {{ $k }}={{ $v -}}
+# export {{ $k }}={{ $v }}
 {{ else -}}
 # TODO set {{ $k }}
 # export {{ $k }}=
-echo ${{ $k -}}
+echo ${{ $k }}
+{{ end -}}
 {{ end -}}
 {{ end }}
-
 {{ divider "inputs" }}
 {{ range nonTaskInputs . }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})

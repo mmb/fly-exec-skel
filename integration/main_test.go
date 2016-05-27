@@ -116,4 +116,28 @@ rm -rf $OUTPUT_2
 `))
 	})
 
+	Context("when there are no params", func() {
+		BeforeEach(func() {
+			taskYaml = `---
+platform: linux
+inputs:
+  - name: input-1
+  - name: input-2
+  - name: task-repo
+outputs:
+  - name: output-1
+  - name: output-2
+run:
+  path: task-repo/task1/task.sh
+`
+		})
+
+		It("does not include the params header", func() {
+			command := exec.Command(binaryPath, "-taskYamlPath", taskYamlFile.Name(), "-target", "test-target")
+			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			Expect(err).ToNot(HaveOccurred())
+			Eventually(session).Should(gexec.Exit(0))
+			Expect(session.Out.Contents()).ToNot(ContainSubstring("# params ---"))
+		})
+	})
 })
