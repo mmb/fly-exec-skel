@@ -50,14 +50,18 @@ set -eu
 echo ${{ $k }}
 {{ end -}}
 {{ end -}}
-{{ end }}
-{{ divider "inputs" }}
-{{ range nonTaskInputs . }}
-{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
-# TODO create test input in ${{ envVarName .Name -}}
-{{ end }}
+{{ end -}}
 
-{{ divider "outputs" }}
+{{ if nonTaskInputs . -}}
+{{ "\n" }}{{ divider "inputs" }}
+
+{{ range nonTaskInputs . -}}
+{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
+# TODO create test input in ${{ envVarName .Name }}
+{{ end -}}
+{{ end -}}
+
+{{ "\n" }}{{ divider "outputs" }}
 {{ range .Outputs }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 {{- end -}}
