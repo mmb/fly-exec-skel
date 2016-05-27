@@ -45,11 +45,9 @@ set -eu
 # export {{ $k }}=
 echo ${{ $k -}}
 {{ end -}}
-{{ end -}}
 {{ end }}
 
 {{ divider "inputs" }}
-{{ with .TaskConfig -}}
 {{ range nonTaskInputs . }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
 # TODO create test input in ${{ envVarName .Name -}}
