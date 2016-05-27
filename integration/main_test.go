@@ -11,17 +11,17 @@ import (
 
 var _ = Describe("Integration", func() {
 	var binaryPath string
-	var taskYaml *os.File
+	var taskYamlFile *os.File
 
 	BeforeSuite(func() {
 		var err error
 		binaryPath, err = gexec.Build("github.com/mmb/fly-exec-skel")
 		Expect(err).ToNot(HaveOccurred())
 
-		taskYaml, err = ioutil.TempFile("", "task.yml")
+		taskYamlFile, err = ioutil.TempFile("", "task.yml")
 		Expect(err).ToNot(HaveOccurred())
 
-		_, err = taskYaml.Write([]byte(`---
+		_, err = taskYamlFile.Write([]byte(`---
 platform: linux
 inputs:
   - name: input-1
@@ -39,17 +39,17 @@ params:
   PARAM_4:
 `))
 		Expect(err).ToNot(HaveOccurred())
-		taskYaml.Close()
+		taskYamlFile.Close()
 	})
 
 	AfterSuite(func() {
 		gexec.CleanupBuildArtifacts()
 
-		os.Remove(taskYaml.Name())
+		os.Remove(taskYamlFile.Name())
 	})
 
 	It("generates a shell script", func() {
-		command := exec.Command(binaryPath, "-taskYamlPath", taskYaml.Name(), "-target", "test-target")
+		command := exec.Command(binaryPath, "-taskYamlPath", taskYamlFile.Name(), "-target", "test-target")
 		session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 		Expect(err).ToNot(HaveOccurred())
 		Eventually(session).Should(gexec.Exit(0))
