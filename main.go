@@ -92,14 +92,15 @@ ls -l ${{ envVarName .Name }}
 
 {{ if (nonTaskInputs .) or .Outputs -}}
 {{ "\n" }}{{ divider "cleanup" }}
-{{ range nonTaskInputs . }}
-rm -rf ${{ envVarName .Name -}}
+
+{{ range nonTaskInputs . -}}
+rm -rf ${{ envVarName .Name }}
 {{ end -}}
-{{ range .Outputs }}
-rm -rf ${{ envVarName .Name -}}
+{{ range .Outputs -}}
+rm -rf ${{ envVarName .Name }}
 {{ end -}}
 {{ end -}}
-{{ end }}
+{{ end -}}
 `
 	tmpl := template.New("script")
 	tmpl.Funcs(template.FuncMap{
