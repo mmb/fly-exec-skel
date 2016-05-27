@@ -36,19 +36,30 @@ func main() {
 set -eu
 
 {{ divider "params" }}
-{{ with .TaskConfig }}{{ range $k, $v := .Params }}
-{{ if $v }}# export {{ $k }}={{ $v }}{{ else }}# TODO set {{ $k }}
+{{ with .TaskConfig -}}
+{{ range $k, $v := .Params }}
+{{ if $v -}}
+# export {{ $k }}={{ $v -}}
+{{ else -}}
+# TODO set {{ $k }}
 # export {{ $k }}=
-echo ${{ $k }}{{ end }}{{ end }}{{ end }}
+echo ${{ $k -}}
+{{ end -}}
+{{ end -}}
+{{ end }}
 
 {{ divider "inputs" }}
-{{ with .TaskConfig }}{{ range nonTaskInputs . }}
+{{ with .TaskConfig -}}
+{{ range nonTaskInputs . }}
 {{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
-# TODO create test input in ${{ envVarName .Name }}{{ end }}
+# TODO create test input in ${{ envVarName .Name -}}
+{{ end }}
 
 {{ divider "outputs" }}
 {{ range .Outputs }}
-{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }}){{ end }}{{ end }}
+{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
+{{- end -}}
+{{ end }}
 
 {{ divider "execute" }}
 
@@ -56,18 +67,24 @@ fly \
   -t {{ .Target }} \
   execute \
   -i {{ taskInputName .TaskConfig }}={{ runPathToTaskInput .TaskConfig }} \
-{{ with .TaskConfig }}{{ range nonTaskInputs . }}  -i {{ .Name }}=${{ envVarName .Name }} \
-{{ end }}{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
+{{ with .TaskConfig -}}
+{{ range nonTaskInputs . }}  -i {{ .Name }}=${{ envVarName .Name }} \
+{{ end -}}
+{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}  -c task.yml
 
 {{ divider "show outputs" }}
 {{ range .Outputs }}
-ls -l ${{ envVarName .Name }}{{ end }}
+ls -l ${{ envVarName .Name -}}
+{{ end }}
 
 {{ divider "cleanup" }}
 {{ range nonTaskInputs . }}
-rm -rf ${{ envVarName .Name }}{{ end }}{{ range .Outputs }}
-rm -rf ${{ envVarName .Name }}{{ end }}
+rm -rf ${{ envVarName .Name -}}
+{{ end -}}
+{{ range .Outputs }}
+rm -rf ${{ envVarName .Name -}}
+{{ end }}
 {{ end }}`
 	tmpl := template.New("script")
 	tmpl.Funcs(template.FuncMap{
