@@ -83,12 +83,15 @@ fly \
 {{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
 {{ end }}  -c task.yml
 
+{{ if .Outputs -}}
 {{ divider "show outputs" }}
-{{ range .Outputs }}
-ls -l ${{ envVarName .Name -}}
-{{ end }}
 
-{{ divider "cleanup" }}
+{{ range .Outputs -}}
+ls -l ${{ envVarName .Name }}
+{{ end -}}
+{{ end -}}
+
+{{ "\n" }}{{ divider "cleanup" }}
 {{ range nonTaskInputs . }}
 rm -rf ${{ envVarName .Name -}}
 {{ end -}}

@@ -194,5 +194,13 @@ params:
 			Eventually(session).Should(gexec.Exit(0))
 			Expect(session.Out.Contents()).ToNot(ContainSubstring("# outputs ---"))
 		})
+
+		It("does not include the show outputs header", func() {
+			command := exec.Command(binaryPath, "-taskYamlPath", taskYamlFile.Name(), "-target", "test-target")
+			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			Expect(err).ToNot(HaveOccurred())
+			Eventually(session).Should(gexec.Exit(0))
+			Expect(session.Out.Contents()).ToNot(ContainSubstring("# show outputs ---"))
+		})
 	})
 })
