@@ -61,13 +61,17 @@ echo ${{ $k }}
 {{ end -}}
 {{ end -}}
 
+{{ if .Outputs -}}
 {{ "\n" }}{{ divider "outputs" }}
-{{ range .Outputs }}
-{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
-{{- end -}}
-{{ end }}
 
-{{ divider "execute" }}
+{{ range .Outputs -}}
+{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
+{{ end -}}
+{{ end -}}
+
+{{ end -}}
+
+{{ "\n" }}{{ divider "execute" }}
 
 fly \
   -t {{ .Target }} \

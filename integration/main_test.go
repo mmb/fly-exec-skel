@@ -168,4 +168,31 @@ params:
 			Expect(session.Out.Contents()).ToNot(ContainSubstring("# inputs ---"))
 		})
 	})
+
+	Context("when there are no outputs", func() {
+		BeforeEach(func() {
+			taskYaml = `---
+platform: linux
+inputs:
+  - name: input-1
+  - name: input-2
+  - name: task-repo
+run:
+  path: task-repo/task1/task.sh
+params:
+  PARAM_1: param-1-default
+  PARAM_2: param-2-default
+  PARAM_3:
+  PARAM_4:
+`
+		})
+
+		It("does not include the outputs header", func() {
+			command := exec.Command(binaryPath, "-taskYamlPath", taskYamlFile.Name(), "-target", "test-target")
+			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			Expect(err).ToNot(HaveOccurred())
+			Eventually(session).Should(gexec.Exit(0))
+			Expect(session.Out.Contents()).ToNot(ContainSubstring("# outputs ---"))
+		})
+	})
 })
