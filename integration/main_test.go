@@ -10,9 +10,26 @@ import (
 )
 
 var _ = Describe("Integration", func() {
-	var binaryPath string
-	var taskYamlFile *os.File
-	taskYaml := `---
+	var (
+		binaryPath   string
+		taskYamlFile *os.File
+		taskYaml     string
+	)
+
+	BeforeSuite(func() {
+		var err error
+		binaryPath, err = gexec.Build("github.com/mmb/fly-exec-skel")
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	AfterSuite(func() {
+		gexec.CleanupBuildArtifacts()
+
+		os.Remove(taskYamlFile.Name())
+	})
+
+	BeforeEach(func() {
+		taskYaml = `---
 platform: linux
 inputs:
   - name: input-1
@@ -29,24 +46,16 @@ params:
   PARAM_3:
   PARAM_4:
 `
+	})
 
-	BeforeSuite(func() {
+	JustBeforeEach(func() {
 		var err error
-		binaryPath, err = gexec.Build("github.com/mmb/fly-exec-skel")
-		Expect(err).ToNot(HaveOccurred())
-
 		taskYamlFile, err = ioutil.TempFile("", "task.yml")
 		Expect(err).ToNot(HaveOccurred())
 
 		_, err = taskYamlFile.Write([]byte(taskYaml))
 		Expect(err).ToNot(HaveOccurred())
 		taskYamlFile.Close()
-	})
-
-	AfterSuite(func() {
-		gexec.CleanupBuildArtifacts()
-
-		os.Remove(taskYamlFile.Name())
 	})
 
 	It("generates a shell script", func() {
