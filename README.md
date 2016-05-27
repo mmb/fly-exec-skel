@@ -21,6 +21,8 @@ you need (create files, git init, etc.)
 
 - clean up up temporary directories
 
+Scripts are expected to be run from the directory that the `task.yml` is in.
+
 Example generated script:
 
 ```sh
