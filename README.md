@@ -32,26 +32,26 @@ set -eu
 
 # params -----------------------------------------------------------------------
 
-# export PARAM_1=param-1-default
-# export PARAM_2=param-2-default
-# TODO set PARAM_3
-# export PARAM_3=
-echo $PARAM_3
-# TODO set PARAM_4
-# export PARAM_4=
-echo $PARAM_4
+# export PARAM_1_PARAM=param-1-default
+# export PARAM_2_PARAM=param-2-default
+# TODO set PARAM_3_PARAM
+# export PARAM_3_PARAM=
+echo $PARAM_3_PARAM
+# TODO set PARAM_4_PARAM
+# export PARAM_4_PARAM=
+echo $PARAM_4_PARAM
 
 # inputs -----------------------------------------------------------------------
 
-INPUT_1=$(mktemp -d -t input-1)
-# TODO create test input in $INPUT_1
-INPUT_2=$(mktemp -d -t input-2)
-# TODO create test input in $INPUT_2
+INPUT_1_INPUT=$(mktemp -d -t input-1)
+# TODO create test input in $INPUT_1_INPUT
+INPUT_2_INPUT=$(mktemp -d -t input-2)
+# TODO create test input in $INPUT_2_INPUT
 
 # outputs ----------------------------------------------------------------------
 
-OUTPUT_1=$(mktemp -d -t output-1)
-OUTPUT_2=$(mktemp -d -t output-2)
+OUTPUT_1_OUTPUT=$(mktemp -d -t output-1)
+OUTPUT_2_OUTPUT=$(mktemp -d -t output-2)
 
 # execute ----------------------------------------------------------------------
 
@@ -59,21 +59,21 @@ fly \
   -t test-target \
   execute \
   -i task-repo=.. \
-  -i input-1=$INPUT_1 \
-  -i input-2=$INPUT_2 \
-  -o output-1=$OUTPUT_1 \
-  -o output-2=$OUTPUT_2 \
+  -i input-1=$INPUT_1_INPUT \
+  -i input-2=$INPUT_2_INPUT \
+  -o output-1=$OUTPUT_1_OUTPUT \
+  -o output-2=$OUTPUT_2_OUTPUT \
   -c task.yml
 
 # show outputs -----------------------------------------------------------------
 
-ls -l $OUTPUT_1
-ls -l $OUTPUT_2
+ls -l $OUTPUT_1_OUTPUT
+ls -l $OUTPUT_2_OUTPUT
 
 # cleanup ----------------------------------------------------------------------
 
-rm -rf $INPUT_1
-rm -rf $INPUT_2
-rm -rf $OUTPUT_1
-rm -rf $OUTPUT_2
+rm -rf $INPUT_1_INPUT
+rm -rf $INPUT_2_INPUT
+rm -rf $OUTPUT_1_OUTPUT
+rm -rf $OUTPUT_2_OUTPUT
 ```
