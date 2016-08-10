@@ -42,11 +42,11 @@ set -eu
 
 {{ range $k, $v := .Params -}}
 {{ if $v -}}
-# export {{ $k }}={{ $v }}
+# export {{ paramEnvVarName $k }}={{ $v }}
 {{ else -}}
-# TODO set {{ $k }}
-# export {{ $k }}=
-echo ${{ $k }}
+# TODO set {{ paramEnvVarName $k }}
+# export {{ paramEnvVarName $k }}=
+echo ${{ paramEnvVarName $k }}
 {{ end -}}
 {{ end -}}
 {{ end -}}
@@ -55,8 +55,8 @@ echo ${{ $k }}
 {{ "\n" }}{{ divider "inputs" }}
 
 {{ range nonTaskInputs . -}}
-{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
-# TODO create test input in ${{ envVarName .Name }}
+{{ inputEnvVarName .Name }}=$(mktemp -d -t {{ .Name }})
+# TODO create test input in ${{ inputEnvVarName .Name }}
 {{ end -}}
 {{ end -}}
 
@@ -64,7 +64,7 @@ echo ${{ $k }}
 {{ "\n" }}{{ divider "outputs" }}
 
 {{ range .Outputs -}}
-{{ envVarName .Name }}=$(mktemp -d -t {{ .Name }})
+{{ outputEnvVarName .Name }}=$(mktemp -d -t {{ .Name }})
 {{ end -}}
 {{ end -}}
 
@@ -77,16 +77,16 @@ fly \
   execute \
   -i {{ taskInputName .TaskConfig }}={{ runPathToTaskInput .TaskConfig }} \
 {{ with .TaskConfig -}}
-{{ range nonTaskInputs . }}  -i {{ .Name }}=${{ envVarName .Name }} \
+{{ range nonTaskInputs . }}  -i {{ .Name }}=${{ inputEnvVarName .Name }} \
 {{ end -}}
-{{ range .Outputs }}  -o {{ .Name }}=${{ envVarName .Name }} \
+{{ range .Outputs }}  -o {{ .Name }}=${{ outputEnvVarName .Name }} \
 {{ end }}  -c task.yml{{ "\n" }}
 
 {{- if .Outputs -}}
 {{ "\n" }}{{ divider "show outputs" }}
 
 {{ range .Outputs -}}
-ls -l ${{ envVarName .Name }}
+ls -l ${{ outputEnvVarName .Name }}
 {{ end -}}
 {{ end -}}
 
@@ -94,10 +94,10 @@ ls -l ${{ envVarName .Name }}
 {{ "\n" }}{{ divider "cleanup" }}
 
 {{ range nonTaskInputs . -}}
-rm -rf ${{ envVarName .Name }}
+rm -rf ${{ inputEnvVarName .Name }}
 {{ end -}}
 {{ range .Outputs -}}
-rm -rf ${{ envVarName .Name }}
+rm -rf ${{ outputEnvVarName .Name }}
 {{ end -}}
 {{ end -}}
 {{ end -}}
@@ -105,8 +105,10 @@ rm -rf ${{ envVarName .Name }}
 	tmpl := template.New("script")
 	tmpl.Funcs(template.FuncMap{
 		"divider":            flyexecskel.Divider,
-		"envVarName":         flyexecskel.EnvVarName,
+		"inputEnvVarName":    flyexecskel.InputEnvVarName,
 		"nonTaskInputs":      flyexecskel.NonTaskInputs,
+		"outputEnvVarName":   flyexecskel.OutputEnvVarName,
+		"paramEnvVarName":    flyexecskel.ParamEnvVarName,
 		"runPathToTaskInput": flyexecskel.RunPathToTaskInput,
 		"taskInputName":      flyexecskel.TaskInputName,
 	})

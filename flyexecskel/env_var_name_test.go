@@ -7,11 +7,39 @@ import (
 )
 
 var _ = Describe("EnvVarName", func() {
-	It("uppercases", func() {
-		Expect(flyexecskel.EnvVarName("AbCdEf")).To(Equal("ABCDEF"))
+	Describe("InputEnvVarName", func() {
+		It("uppercases and adds input suffix", func() {
+			Expect(flyexecskel.InputEnvVarName("AbCdEf")).To(Equal(
+				"ABCDEF_INPUT"))
+		})
+
+		It("converts dashes to underscores and adds input suffix", func() {
+			Expect(flyexecskel.InputEnvVarName("a-b-c")).To(Equal(
+				"A_B_C_INPUT"))
+		})
 	})
 
-	It("converts dashes to underscores", func() {
-		Expect(flyexecskel.EnvVarName("a-b-c")).To(Equal("A_B_C"))
+	Describe("OutputEnvVarName", func() {
+		It("uppercases and adds output suffix", func() {
+			Expect(flyexecskel.OutputEnvVarName("AbCdEf")).To(Equal(
+				"ABCDEF_OUTPUT"))
+		})
+
+		It("converts dashes to underscores and adds output suffix", func() {
+			Expect(flyexecskel.OutputEnvVarName("a-b-c")).To(Equal(
+				"A_B_C_OUTPUT"))
+		})
+	})
+
+	Describe("ParamEnvVarName", func() {
+		It("uppercases and adds param suffix", func() {
+			Expect(flyexecskel.ParamEnvVarName("AbCdEf")).To(Equal(
+				"ABCDEF_PARAM"))
+		})
+
+		It("converts dashes to underscores and adds param suffix", func() {
+			Expect(flyexecskel.ParamEnvVarName("a-b-c")).To(Equal(
+				"A_B_C_PARAM"))
+		})
 	})
 })

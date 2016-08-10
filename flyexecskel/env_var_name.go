@@ -1,9 +1,22 @@
 package flyexecskel
 
 import (
+	"fmt"
 	"strings"
 )
 
-func EnvVarName(s string) string {
+func InputEnvVarName(s string) string {
+	return fmt.Sprintf("%s_INPUT", envVarName(s))
+}
+
+func OutputEnvVarName(s string) string {
+	return fmt.Sprintf("%s_OUTPUT", envVarName(s))
+}
+
+func ParamEnvVarName(s string) string {
+	return fmt.Sprintf("%s_PARAM", envVarName(s))
+}
+
+func envVarName(s string) string {
 	return strings.Replace(strings.ToUpper(s), "-", "_", -1)
 }
