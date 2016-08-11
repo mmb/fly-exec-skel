@@ -69,14 +69,14 @@ set -eu
 
 # params -----------------------------------------------------------------------
 
-# export PARAM_1_PARAM=param-1-default
-# export PARAM_2_PARAM=param-2-default
-# TODO set PARAM_3_PARAM
-# export PARAM_3_PARAM=
-echo $PARAM_3_PARAM
-# TODO set PARAM_4_PARAM
-# export PARAM_4_PARAM=
-echo $PARAM_4_PARAM
+# export PARAM_1=param-1-default
+# export PARAM_2=param-2-default
+# TODO set PARAM_3
+# export PARAM_3=
+echo $PARAM_3
+# TODO set PARAM_4
+# export PARAM_4=
+echo $PARAM_4
 
 # inputs -----------------------------------------------------------------------
 

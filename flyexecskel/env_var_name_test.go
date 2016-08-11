@@ -30,16 +30,4 @@ var _ = Describe("EnvVarName", func() {
 				"A_B_C_OUTPUT"))
 		})
 	})
-
-	Describe("ParamEnvVarName", func() {
-		It("uppercases and adds param suffix", func() {
-			Expect(flyexecskel.ParamEnvVarName("AbCdEf")).To(Equal(
-				"ABCDEF_PARAM"))
-		})
-
-		It("converts dashes to underscores and adds param suffix", func() {
-			Expect(flyexecskel.ParamEnvVarName("a-b-c")).To(Equal(
-				"A_B_C_PARAM"))
-		})
-	})
 })

@@ -42,11 +42,11 @@ set -eu
 
 {{ range $k, $v := .Params -}}
 {{ if $v -}}
-# export {{ paramEnvVarName $k }}={{ $v }}
+# export {{ $k }}={{ $v }}
 {{ else -}}
-# TODO set {{ paramEnvVarName $k }}
-# export {{ paramEnvVarName $k }}=
-echo ${{ paramEnvVarName $k }}
+# TODO set {{ $k }}
+# export {{ $k }}=
+echo ${{ $k }}
 {{ end -}}
 {{ end -}}
 {{ end -}}
@@ -108,7 +108,6 @@ rm -rf ${{ outputEnvVarName .Name }}
 		"inputEnvVarName":    flyexecskel.InputEnvVarName,
 		"nonTaskInputs":      flyexecskel.NonTaskInputs,
 		"outputEnvVarName":   flyexecskel.OutputEnvVarName,
-		"paramEnvVarName":    flyexecskel.ParamEnvVarName,
 		"runPathToTaskInput": flyexecskel.RunPathToTaskInput,
 		"taskInputName":      flyexecskel.TaskInputName,
 	})

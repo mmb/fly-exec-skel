@@ -13,10 +13,6 @@ func OutputEnvVarName(s string) string {
 	return fmt.Sprintf("%s_OUTPUT", envVarName(s))
 }
 
-func ParamEnvVarName(s string) string {
-	return fmt.Sprintf("%s_PARAM", envVarName(s))
-}
-
 func envVarName(s string) string {
 	return strings.Replace(strings.ToUpper(s), "-", "_", -1)
 }
