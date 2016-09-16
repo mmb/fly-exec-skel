@@ -7,7 +7,12 @@ import (
 )
 
 func TaskInputName(taskConfig atc.TaskConfig) string {
-	return strings.SplitN(taskConfig.Run.Path, "/", 2)[0]
+	firstSlashIndex := strings.IndexRune(taskConfig.Run.Path, '/')
+	if firstSlashIndex == -1 {
+		return ""
+	} else {
+		return taskConfig.Run.Path[:firstSlashIndex]
+	}
 }
 
 func NonTaskInputs(taskConfig atc.TaskConfig) []atc.TaskInputConfig {

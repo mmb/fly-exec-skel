@@ -169,6 +169,38 @@ params:
 		})
 	})
 
+	Context("when there are no inputs", func() {
+		BeforeEach(func() {
+			taskYaml = `---
+platform: linux
+inputs: []
+run:
+  path: bash
+  args:
+    - -c
+    - echo test
+`
+		})
+
+		It("does not include any inputs", func() {
+			command := exec.Command(binaryPath, "-taskYamlPath", taskYamlFile.Name(), "-target", "test-target")
+			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
+			Expect(err).ToNot(HaveOccurred())
+			Eventually(session).Should(gexec.Exit(0))
+			Expect(session.Out.Contents()).To(BeEquivalentTo(`#!/bin/bash
+
+set -eu
+
+# execute ----------------------------------------------------------------------
+
+fly \
+  -t test-target \
+  execute \
+  -c task.yml
+`))
+		})
+	})
+
 	Context("when there are no outputs", func() {
 		BeforeEach(func() {
 			taskYaml = `---

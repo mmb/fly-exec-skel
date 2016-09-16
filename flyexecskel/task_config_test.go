@@ -9,11 +9,29 @@ import (
 
 var _ = Describe("TaskConfig", func() {
 	Describe("TaskInputName", func() {
-		It("returns the name of the task input", func() {
-			taskConfig := atc.TaskConfig{
-				Run: atc.TaskRunConfig{Path: "task-repo/a/b/task.sh"},
-			}
-			Expect(flyexecskel.TaskInputName(taskConfig)).To(Equal("task-repo"))
+		Context("when the run is a relative path", func() {
+			It("returns the name of the task input", func() {
+				taskConfig := atc.TaskConfig{
+					Run: atc.TaskRunConfig{Path: "task-repo/a/b/task.sh"},
+				}
+				Expect(flyexecskel.TaskInputName(taskConfig)).To(Equal("task-repo"))
+			})
+			Context("when the run is an absolute path", func() {
+				It("returns the empty string", func() {
+					taskConfig := atc.TaskConfig{
+						Run: atc.TaskRunConfig{Path: "/a/b/task.sh"},
+					}
+					Expect(flyexecskel.TaskInputName(taskConfig)).To(Equal(""))
+				})
+			})
+			Context("when the run has no directories", func() {
+				It("returns the empty string", func() {
+					taskConfig := atc.TaskConfig{
+						Run: atc.TaskRunConfig{Path: "bash"},
+					}
+					Expect(flyexecskel.TaskInputName(taskConfig)).To(Equal(""))
+				})
+			})
 		})
 	})
 

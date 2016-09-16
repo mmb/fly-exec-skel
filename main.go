@@ -75,7 +75,10 @@ echo ${{ $k }}
 fly \
   -t {{ .Target }} \
   execute \
-  -i {{ taskInputName .TaskConfig }}={{ runPathToTaskInput .TaskConfig }} \
+{{ if taskInputName .TaskConfig -}}
+{{ "  " }}-i {{ taskInputName .TaskConfig }}={{ runPathToTaskInput .TaskConfig }} \{{ "\n" }}
+{{- end -}}
+
 {{ with .TaskConfig -}}
 {{ range nonTaskInputs . }}  -i {{ .Name }}=${{ inputEnvVarName .Name }} \
 {{ end -}}
