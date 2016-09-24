@@ -1,6 +1,7 @@
 package integration_test
 
 import (
+	"fmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
@@ -63,7 +64,7 @@ params:
 		session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 		Expect(err).ToNot(HaveOccurred())
 		Eventually(session).Should(gexec.Exit(0))
-		Expect(session.Out.Contents()).To(BeEquivalentTo(`#!/bin/bash
+		Expect(session.Out.Contents()).To(BeEquivalentTo(fmt.Sprintf(`#!/bin/bash
 
 set -eu
 
@@ -100,7 +101,7 @@ fly \
   -i input-2=$INPUT_2_INPUT \
   -o output-1=$OUTPUT_1_OUTPUT \
   -o output-2=$OUTPUT_2_OUTPUT \
-  -c task.yml
+  -c %s
 
 # show outputs -----------------------------------------------------------------
 
@@ -113,7 +114,7 @@ rm -rf $INPUT_1_INPUT
 rm -rf $INPUT_2_INPUT
 rm -rf $OUTPUT_1_OUTPUT
 rm -rf $OUTPUT_2_OUTPUT
-`))
+`, taskYamlFile.Name())))
 	})
 
 	Context("when there are no params", func() {
@@ -187,7 +188,7 @@ run:
 			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 			Expect(err).ToNot(HaveOccurred())
 			Eventually(session).Should(gexec.Exit(0))
-			Expect(session.Out.Contents()).To(BeEquivalentTo(`#!/bin/bash
+			Expect(session.Out.Contents()).To(BeEquivalentTo(fmt.Sprintf(`#!/bin/bash
 
 set -eu
 
@@ -196,8 +197,8 @@ set -eu
 fly \
   -t test-target \
   execute \
-  -c task.yml
-`))
+  -c %s
+`, taskYamlFile.Name())))
 		})
 	})
 

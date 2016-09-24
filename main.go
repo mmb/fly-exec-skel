@@ -10,19 +10,19 @@ import (
 )
 
 type templateInput struct {
-	TaskConfig atc.TaskConfig
-	Target     string
+	TaskConfig   atc.TaskConfig
+	Target       string
+	TaskYamlPath string
 }
 
 func main() {
-	var taskYamlPath string
 	ti := new(templateInput)
 
-	flag.StringVar(&taskYamlPath, "taskYamlPath", "./task.yml", "path to task YAML")
+	flag.StringVar(&ti.TaskYamlPath, "taskYamlPath", "./task.yml", "path to task YAML")
 	flag.StringVar(&ti.Target, "target", "private", "Concourse target name")
 	flag.Parse()
 
-	taskYamlBytes, err := ioutil.ReadFile(taskYamlPath)
+	taskYamlBytes, err := ioutil.ReadFile(ti.TaskYamlPath)
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +82,7 @@ fly \
 {{ range nonTaskInputs .TaskConfig }}  -i {{ .Name }}=${{ inputEnvVarName .Name }} \
 {{ end -}}
 {{ range .TaskConfig.Outputs }}  -o {{ .Name }}=${{ outputEnvVarName .Name }} \
-{{ end }}  -c task.yml{{ "\n" }}
+{{ end }}  -c {{ .TaskYamlPath }}{{ "\n" }}
 
 {{- if .TaskConfig.Outputs -}}
 {{ "\n" }}{{ divider "show outputs" }}
