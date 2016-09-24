@@ -79,29 +79,27 @@ fly \
 {{ "  " }}-i {{ taskInputName .TaskConfig }}={{ runPathToTaskInput .TaskConfig }} \{{ "\n" }}
 {{- end -}}
 
-{{ with .TaskConfig -}}
-{{ range nonTaskInputs . }}  -i {{ .Name }}=${{ inputEnvVarName .Name }} \
+{{ range nonTaskInputs .TaskConfig }}  -i {{ .Name }}=${{ inputEnvVarName .Name }} \
 {{ end -}}
-{{ range .Outputs }}  -o {{ .Name }}=${{ outputEnvVarName .Name }} \
+{{ range .TaskConfig.Outputs }}  -o {{ .Name }}=${{ outputEnvVarName .Name }} \
 {{ end }}  -c task.yml{{ "\n" }}
 
-{{- if .Outputs -}}
+{{- if .TaskConfig.Outputs -}}
 {{ "\n" }}{{ divider "show outputs" }}
 
-{{ range .Outputs -}}
+{{ range .TaskConfig.Outputs -}}
 ls -l ${{ outputEnvVarName .Name }}
 {{ end -}}
 {{ end -}}
 
-{{ if (nonTaskInputs .) or .Outputs -}}
+{{ if (nonTaskInputs .TaskConfig) or .TaskConfig.Outputs -}}
 {{ "\n" }}{{ divider "cleanup" }}
 
-{{ range nonTaskInputs . -}}
+{{ range nonTaskInputs .TaskConfig -}}
 rm -rf ${{ inputEnvVarName .Name }}
 {{ end -}}
-{{ range .Outputs -}}
+{{ range .TaskConfig.Outputs -}}
 rm -rf ${{ outputEnvVarName .Name }}
-{{ end -}}
 {{ end -}}
 {{ end -}}
 `
