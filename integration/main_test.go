@@ -25,8 +25,6 @@ var _ = Describe("Integration", func() {
 
 	AfterSuite(func() {
 		gexec.CleanupBuildArtifacts()
-
-		os.Remove(taskYamlFile.Name())
 	})
 
 	BeforeEach(func() {
@@ -57,6 +55,11 @@ params:
 		_, err = taskYamlFile.Write([]byte(taskYaml))
 		Expect(err).ToNot(HaveOccurred())
 		taskYamlFile.Close()
+	})
+
+	AfterEach(func() {
+		err := os.Remove(taskYamlFile.Name())
+		Expect(err).ToNot(HaveOccurred())
 	})
 
 	It("generates a shell script", func() {
