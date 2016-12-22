@@ -4,4 +4,8 @@ go:
   - 1.6
   - 1.7
 
+install:
+  - go get -t ./...
+  - go get github.com/onsi/ginkgo/ginkgo
+
 script: ginkgo -p -r
