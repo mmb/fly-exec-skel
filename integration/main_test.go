@@ -84,15 +84,15 @@ echo $PARAM_4
 
 # inputs -----------------------------------------------------------------------
 
-INPUT_1_INPUT=$(mktemp -d -t input-1)
+INPUT_1_INPUT=$(mktemp -d)
 # TODO create test input in $INPUT_1_INPUT
-INPUT_2_INPUT=$(mktemp -d -t input-2)
+INPUT_2_INPUT=$(mktemp -d)
 # TODO create test input in $INPUT_2_INPUT
 
 # outputs ----------------------------------------------------------------------
 
-OUTPUT_1_OUTPUT=$(mktemp -d -t output-1)
-OUTPUT_2_OUTPUT=$(mktemp -d -t output-2)
+OUTPUT_1_OUTPUT=$(mktemp -d)
+OUTPUT_2_OUTPUT=$(mktemp -d)
 
 # execute ----------------------------------------------------------------------
 

@@ -55,7 +55,7 @@ echo ${{ $k }}
 {{ "\n" }}{{ divider "inputs" }}
 
 {{ range nonTaskInputs . -}}
-{{ inputEnvVarName .Name }}=$(mktemp -d -t {{ .Name }})
+{{ inputEnvVarName .Name }}=$(mktemp -d)
 # TODO create test input in ${{ inputEnvVarName .Name }}
 {{ end -}}
 {{ end -}}
@@ -64,7 +64,7 @@ echo ${{ $k }}
 {{ "\n" }}{{ divider "outputs" }}
 
 {{ range .Outputs -}}
-{{ outputEnvVarName .Name }}=$(mktemp -d -t {{ .Name }})
+{{ outputEnvVarName .Name }}=$(mktemp -d)
 {{ end -}}
 {{ end -}}
 
