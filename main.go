@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"github.com/concourse/atc"
-	"github.com/mmb/fly-exec-skel/flyexecskel"
 	"io/ioutil"
 	"os"
 	"text/template"
+
+	"github.com/concourse/atc"
+	"github.com/mmb/fly-exec-skel/flyexecskel"
 )
 
 type templateInput struct {
